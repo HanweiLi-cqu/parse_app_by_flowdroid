@@ -1,0 +1,10 @@
+apks
+target
+sootOutput
+META-INF
+.idea
+demo.jar
+apk
+out
+script/log/*.log
+script/out
