@@ -53,6 +53,13 @@ public class ApkParse {
         app.constructCallgraph();
         SootMethod entryPoint = app.getDummyMainMethod();
         CallGraph cg = Scene.v().getCallGraph();
+
+        if(result.length()!=0){
+            result = new StringBuilder();
+        }
+        if(!visited.isEmpty()){
+            visited.clear();
+        }
         
         switch (mode) {
             case 0:
