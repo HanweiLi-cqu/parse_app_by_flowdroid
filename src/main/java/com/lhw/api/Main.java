@@ -14,20 +14,14 @@ public class Main {
                     "- redisHost: ip of redis\n" +
                     "- redisPort: port of redis\n" +
                     "Note: redis no passwd");
-            return;
         }
         String androidPlatformPath = args[0];
         String resStoreDir = args[1];
         Config.REDIS_HOST = args[2];
         Config.REDIS_PORT = Integer.valueOf(args[3]);
-        System.out.println(Config.REDIS_HOST);
-        System.out.println(Config.REDIS_PORT);
-
-        int batch = 200;
         ApkParse apkParse = new ApkParse(androidPlatformPath);
-        for(int i=0;i<batch;i++){
+        while(true){
             String apkPath = RedisUtil.popApkPath();
-            System.out.println(apkPath);
             if(apkPath==null){
                 break;
             }

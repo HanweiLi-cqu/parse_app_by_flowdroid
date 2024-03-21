@@ -1,6 +1,7 @@
 import json
 from typing import List, Dict, Union
 import os
+import glob
 def read_json(path):
     with open(path, 'r',encoding="utf-8") as f:
         return json.load(f)
@@ -21,14 +22,6 @@ def write_txt(path, data:Union[List,str], mode):
             f.write(data)
 
 def get_file_list(source_dir,endwith:str=None)->List:
-    file_list = []
-    for root, dirs, files in os.walk(source_dir):
-        for file in files:
-            if endwith is None:
-                file_list.append(os.path.join(root, file))
-            else:
-                if file.endswith(endwith):
-                    file_list.append(os.path.join(root, file))
-        for dir in dirs:
-            file_list.extend(get_file_list(dir,endwith=endwith))
+    pattern = f"{source_dir}/**/*{endwith}"
+    file_list = glob.glob(pattern, recursive=True)
     return file_list
