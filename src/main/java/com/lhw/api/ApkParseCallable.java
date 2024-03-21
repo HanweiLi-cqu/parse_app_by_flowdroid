@@ -14,6 +14,7 @@ public class ApkParseCallable implements Callable<String> {
     }
     @Override
     public String call() throws Exception {
+        apkParse.setAppPath(apkData);
         apkParse.getApi();
         apkParse.storeResult(resStorePath);
         return null;

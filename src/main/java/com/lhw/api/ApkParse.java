@@ -1,10 +1,9 @@
 package com.lhw.api;
+import soot.jimple.infoflow.InfoflowConfiguration;
+import soot.jimple.infoflow.android.InfoflowAndroidConfiguration;
 import soot.jimple.infoflow.android.SetupApplication;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Queue;
+
+import java.util.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -14,10 +13,17 @@ import soot.Scene;
 import soot.SootMethod;
 import soot.jimple.toolkits.callgraph.CallGraph;
 import soot.jimple.toolkits.callgraph.Targets;
+import soot.options.Options;
+
 public class ApkParse {
     private Map<String, Boolean> visited;
     private StringBuilder result = new StringBuilder();
     private String appPath;
+
+    public String getAppPath() {
+        return appPath;
+    }
+
     private String androidPlatformPath;
     private int mode;
     ApkParse(String appPath,String androidPlatformPath,int mode){
@@ -48,7 +54,13 @@ public class ApkParse {
     }
 
     public void getApi(){
-        SetupApplication app = new SetupApplication(androidPlatformPath, appPath);
+        final InfoflowAndroidConfiguration config = new InfoflowAndroidConfiguration();
+        config.getAnalysisFileConfig().setTargetAPKFile(appPath);
+        config.getAnalysisFileConfig().setAndroidPlatformDir(androidPlatformPath);
+        config.setCodeEliminationMode(InfoflowConfiguration.CodeEliminationMode.NoCodeElimination);
+        config.setCallgraphAlgorithm(InfoflowConfiguration.CallgraphAlgorithm.SPARK);
+
+        SetupApplication app = new SetupApplication(config);
         soot.G.reset();
         app.constructCallgraph();
         SootMethod entryPoint = app.getDummyMainMethod();
@@ -103,19 +115,14 @@ public class ApkParse {
         }
     }
 
-//    public static void main(String[] args) {
-//        // 得到第一个参数
-//        String app_path = args[0];
-//        String android_platform_path = args[1];
-//        String output_dir = args[2];
-//        ApkParse.get_api(app_path,android_platform_path, 0);
-//        String res = ApkParse.get_result();
-//        String output_filename = new File(app_path).getName().replace(".apk", ".txt");
-//        String output_path = output_dir + "/" + output_filename;
-//        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(output_path));){
-//            bufferedWriter.write(res);
-//            bufferedWriter.close();
-//        } catch (Exception e) {}
-//
-//    }
+    public static void main(String[] args) {
+        // 得到第一个参数
+        String appPath = "F:\\androidAPISeqExtract\\demo\\test.apk";
+        ApkParse apkParse = new ApkParse(appPath,"F:\\AndroidSdk\\platforms");
+        String output_filename = new File(appPath).getName().replace(".apk", ".txt");
+        String output_path = "F:\\Java\\parse_app_by_flowdroid\\output" + "/" + output_filename;
+        apkParse.getApi();
+        apkParse.storeResult(output_path);
+
+    }
 }
