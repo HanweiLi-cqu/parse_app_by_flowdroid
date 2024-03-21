@@ -1,7 +1,7 @@
 package com.lhw.api;
 
 public class Config {
-    public final static String REDIS_HOST = "";
-    public final static Integer REDIS_PORT = 6379;
+    public static String REDIS_HOST = "";
+    public static Integer REDIS_PORT = 6379;
 
 }

@@ -45,9 +45,5 @@ public class Utils {
         }
     }
 
-    public static void main(String[] args) {
-        System.out.println(Utils.findFilesWithSuffix("F:\\androidAPISeqExtract\\demo","apk"));
-
-    }
 
 }

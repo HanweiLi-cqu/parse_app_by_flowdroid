@@ -54,14 +54,13 @@ public class ApkParse {
     }
 
     public void getApi(){
+        soot.G.reset();
         final InfoflowAndroidConfiguration config = new InfoflowAndroidConfiguration();
         config.getAnalysisFileConfig().setTargetAPKFile(appPath);
         config.getAnalysisFileConfig().setAndroidPlatformDir(androidPlatformPath);
         config.setCodeEliminationMode(InfoflowConfiguration.CodeEliminationMode.NoCodeElimination);
         config.setCallgraphAlgorithm(InfoflowConfiguration.CallgraphAlgorithm.SPARK);
-
         SetupApplication app = new SetupApplication(config);
-        soot.G.reset();
         app.constructCallgraph();
         SootMethod entryPoint = app.getDummyMainMethod();
         CallGraph cg = Scene.v().getCallGraph();
