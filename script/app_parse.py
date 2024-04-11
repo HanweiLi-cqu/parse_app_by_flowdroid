@@ -21,7 +21,7 @@ def single_app_parse():
 def muti_app_parse(n_process:int=10):
     exector = TqdmParallelExcutor()
     exector.initialize(n_process=n_process)
-    exector.execute(func=single_app_parse,chunksize=1)
+    exector.execute(func=single_app_parse,input_list=[],chunksize=1)
     return 0
 
 if __name__=="__main__":
