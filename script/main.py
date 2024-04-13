@@ -7,5 +7,5 @@ from config import APK_DIR
 if __name__=="__main__":
     apk_lst = get_file_list(APK_DIR,endwith="apk")
     push_file_list_to_redis(apk_lst)
-    muti_app_parse(n_process=10)
+    muti_app_parse(n_process=2)
     

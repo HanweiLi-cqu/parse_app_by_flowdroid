@@ -9,7 +9,6 @@ import java.util.List;
 
 public class RedisUtil {
     private static JedisPool jedisPool = null;
-    private static final String APK_PATHS_KEY = "apkPaths";
 
     static {
         JedisPoolConfig poolConfig = new JedisPoolConfig();
@@ -22,28 +21,29 @@ public class RedisUtil {
     }
     public static void pushApkPath(String path) {
         try (Jedis jedis = jedisPool.getResource()) {
-            jedis.lpush(APK_PATHS_KEY, path);
+            jedis.sadd(Config.REDIS_KEY,path);
         }
     }
     public static void pushApkList(List<String> paths){
         try(Jedis jedis = jedisPool.getResource()){
-            jedis.lpush(APK_PATHS_KEY, paths.toArray(new String[0]));
+            jedis.sadd(Config.REDIS_KEY,paths.toArray(new String[0]));
         }
     }
 
     public static String popApkPath() {
         try (Jedis jedis = jedisPool.getResource()) {
-            List<String> res = jedis.brpop(5, APK_PATHS_KEY);
+            String res = jedis.spop(Config.REDIS_KEY);
             if(res==null){
                 return null;
             }
-            return res.get(1);
+            return res;
         }
     }
 
     public static void main(String[] args) {
-        List<String> apks = Utils.findFilesWithSuffix("F:\\androidAPISeqExtract\\demo","apk");
-        pushApkList(apks);
-        System.out.println("ok");
+        // List<String> apks = Utils.findFilesWithSuffix("F:\\androidAPISeqExtract\\demo","apk");
+        // pushApkList(apks);
+        // System.out.println("ok");
+        System.out.println(popApkPath());
     }
 }
