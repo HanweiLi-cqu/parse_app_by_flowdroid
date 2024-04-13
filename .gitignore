@@ -8,3 +8,6 @@ apk
 out
 script/log/*.log
 script/out
+output
+script/res
+script/.venv
